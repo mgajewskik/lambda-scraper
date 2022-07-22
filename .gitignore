@@ -1,0 +1,4 @@
+src/package/*
+src/lambda.zip
+src/layers.zip
+infra/terraform/.terraform
