@@ -74,7 +74,6 @@ resource "aws_s3_object" "layers" {
 
 
 
-
 # variable "resource_prefix" {}
 # variable "lambda_warmer_role_arn" {}
 # variable "deployment_package_bucket" {}

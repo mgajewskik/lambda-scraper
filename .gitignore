@@ -1,4 +1,3 @@
 src/package/*
-src/lambda.zip
-src/layers.zip
-infra/terraform/.terraform
+src/prototype.ipynb
+test.py

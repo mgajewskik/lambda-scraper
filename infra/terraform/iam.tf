@@ -33,7 +33,7 @@ resource "aws_iam_policy" "iam_policy_for_lambda" {
        "ses:SendEmail",
        "ses:SendRawEmail"
      ],
-     "Resource": "arn:aws:logs:*:*:*",
+     "Resource": "*",
      "Effect": "Allow"
    }
  ]
