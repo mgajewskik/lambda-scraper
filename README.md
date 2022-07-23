@@ -8,6 +8,7 @@ TODO:
 - create s3 buckets to store state files there
 - pass email as an environment variable to lambda function
 - how to pass github secrets to terraform variables?
+- dummy commit test
 
 # Considerations
 - to send emails to other people move out of [AWS SES Sandbox](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html?icmpid=docs_ses_console)
