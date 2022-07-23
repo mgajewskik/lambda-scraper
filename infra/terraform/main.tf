@@ -13,19 +13,7 @@ resource "random_uuid" "bucket" {
   keepers = tomap({ type = "lambda", name = "scraper" })
 }
 
-# TODO not the best wat to do it, locally the packages are created over and
-# over again, when using in CI/CD there is no need for something like this
-# resource "random_id" "timestamp" {
-#   byte_length = 4
-#   keepers = {
-#     timestamp = "${timestamp()}"
-#   }
-# }
-
 locals {
-  # resource_suffix = random_id.timestamp.hex
-  # lambda_layer_package    = "lambda-scraper-layer-${local.resource_suffix}.zip"
-  # lambda_function_package = "lambda-scraper-layer-${local.resource_suffix}.zip"
   lambda_name             = "lambda-scraper"
   lambda_layer_package    = "layers.zip"
   lambda_function_package = "lambda.zip"
@@ -41,14 +29,6 @@ resource "aws_s3_bucket_acl" "s3_bucket_acl" {
   bucket = aws_s3_bucket.lambda_bucket.id
   acl    = "private"
 }
-
-# # TODO move file creation into script?
-# data "archive_file" "lambda_scraper" {
-#   type = "zip"
-#
-#   source_dir  = "${path.module}/../../src/lambda-scraper"
-#   output_path = "${path.module}/../lambda-scraper-${local.resource_suffix}.zip"
-# }
 
 resource "aws_s3_object" "lambda" {
   bucket = aws_s3_bucket.lambda_bucket.id

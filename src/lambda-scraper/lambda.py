@@ -1,6 +1,5 @@
 import boto3
 
-
 EMAIL = "mgajewskik+SES@gmail.com"
 
 HTML_EMAIL_CONTENT = """
