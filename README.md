@@ -10,7 +10,6 @@ TODO:
 
 - create a cloudwatch event to invoke lambda automatically
 - create github actions pipeline that automatially deploys the code with each push to master
-- remove src directory from code, refactor tf files
 
 ## Considerations
 

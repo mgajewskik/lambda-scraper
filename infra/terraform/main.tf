@@ -4,7 +4,7 @@ provider "aws" {
   default_tags {
     tags = {
       onset = "terraform"
-      app   = "lambda-scraper"
+      app   = local.lambda_name
     }
   }
 }
@@ -17,24 +17,25 @@ resource "random_uuid" "lambda_dependencies_hash" {
   keepers = tomap({ "requirements.txt" = filemd5("${local.root_path}/requirements.txt") })
 }
 
-resource "random_uuid" "lambda_src_hash" {
+resource "random_uuid" "lambda_package_hash" {
   keepers = {
     for filename in setunion(
-      fileset(local.lambda_src_path, "*"),
-      fileset(local.lambda_src_path, "**/*")
+      fileset(local.lambda_package_path, "*"),
+      fileset(local.lambda_package_path, "**/*")
     ) :
-    filename => filemd5("${local.lambda_src_path}/${filename}")
+    filename => filemd5("${local.lambda_package_path}/${filename}")
   }
 }
 
 locals {
-  lambda_name     = "lambda-scraper"
-  root_path       = "${path.module}/../.."
-  lambda_src_path = "${local.root_path}/src/lambda-scraper"
-  package_path    = "${local.root_path}/infra/package"
-  pip_target_path = "${local.package_path}/python/lib/python3.9/site-packages"
-  lambda_zip_path = "${local.package_path}/${random_uuid.lambda_src_hash.result}.zip"
-  layers_zip_path = "${local.package_path}/${random_uuid.lambda_dependencies_hash.result}.zip"
+  # TODO change when changing name of the main app folder
+  lambda_name         = "lambda-scraper"
+  root_path           = "${path.module}/../.."
+  lambda_package_path = "${local.root_path}/${local.lambda_name}"
+  package_path        = "${local.root_path}/infra/package"
+  pip_target_path     = "${local.package_path}/python/lib/python3.9/site-packages"
+  lambda_zip_path     = "${local.package_path}/${random_uuid.lambda_package_hash.result}.zip"
+  layers_zip_path     = "${local.package_path}/${random_uuid.lambda_dependencies_hash.result}.zip"
 }
 
 resource "aws_s3_bucket" "lambda_bucket" {
@@ -68,9 +69,9 @@ data "archive_file" "lambda_dependencies" {
   depends_on = [null_resource.install_dependencies]
 }
 
-data "archive_file" "lambda_src" {
+data "archive_file" "lambda_package" {
   type        = "zip"
-  source_dir  = "${local.root_path}/src/lambda-scraper"
+  source_dir  = "${local.root_path}/${local.lambda_name}"
   output_path = local.lambda_zip_path
 }
 
@@ -80,7 +81,7 @@ resource "aws_s3_object" "lambda" {
   source = local.lambda_zip_path
   etag   = filemd5(local.lambda_zip_path)
 
-  depends_on = [data.archive_file.lambda_src]
+  depends_on = [data.archive_file.lambda_package]
 }
 
 resource "aws_s3_object" "layers" {

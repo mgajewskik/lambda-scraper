@@ -1,42 +1,41 @@
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.2.0
-  hooks:
-  - id: check-merge-conflict
-  - id: end-of-file-fixer
-  - id: trailing-whitespace
-  - id: check-yaml
-    args: [--unsafe]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.2.0
+    hooks:
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+        args: [--unsafe]
 
-- repo: https://github.com/pycqa/isort
-  rev: 5.10.1
-  hooks:
-    - id: isort
-      args:
-        - "--profile=black"
+  - repo: https://github.com/pycqa/isort
+    rev: 5.10.1
+    hooks:
+      - id: isort
+        args:
+          - "--profile=black"
 
-- repo: https://github.com/psf/black
-  rev: 22.3.0
-  hooks:
-    - id: black
-      language_version: python3
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
+    hooks:
+      - id: black
+        language_version: python3
 
-- repo: https://github.com/neilbartley/add-msg-issue-prefix-hook
-  rev: v0.0.5
-  hooks:
-    - id: add-msg-issue-prefix
-      language_version: python3
+  - repo: https://github.com/neilbartley/add-msg-issue-prefix-hook
+    rev: v0.0.5
+    hooks:
+      - id: add-msg-issue-prefix
+        language_version: python3
 
-- repo: https://gitlab.com/pycqa/flake8
-  rev: 3.9.2
-  hooks:
-    - id: flake8
-      args:
-        - "src"
-        - "--config=setup.cfg"
-      additional_dependencies: [flake8-typing-imports~=1.10.0]
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
+        args:
+          - "--config=setup.cfg"
+        additional_dependencies: [flake8-typing-imports~=1.10.0]
 
-- repo: https://github.com/antonbabenko/pre-commit-terraform
-  rev: v1.62.3
-  hooks:
-  - id: terraform_fmt
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.62.3
+    hooks:
+      - id: terraform_fmt

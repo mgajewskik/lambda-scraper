@@ -17,7 +17,7 @@ resource "aws_lambda_function" "lambda" {
   layers = [
     aws_lambda_layer_version.layer.arn
   ]
-  source_code_hash = filebase64sha256(aws_s3_object.lambda.source)
+  source_code_hash = filebase64sha256(local.lambda_zip_path)
 
   depends_on = [aws_iam_role_policy_attachment.lambda_role_attachment]
 }
@@ -32,5 +32,5 @@ resource "aws_lambda_layer_version" "layer" {
   s3_bucket           = aws_s3_bucket.lambda_bucket.id
   s3_key              = aws_s3_object.layers.key
   compatible_runtimes = ["python3.9"]
-  source_code_hash    = filebase64sha256(aws_s3_object.layers.source)
+  source_code_hash    = filebase64sha256(local.layers_zip_path)
 }
