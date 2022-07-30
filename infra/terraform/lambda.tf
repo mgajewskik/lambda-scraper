@@ -4,12 +4,20 @@ resource "aws_lambda_function" "lambda" {
   handler       = "lambda.handler"
   runtime       = "python3.9"
   s3_bucket     = aws_s3_bucket.lambda_bucket.id
-  s3_key        = local.lambda_function_package
+  s3_key        = aws_s3_object.lambda.key
+
+  environment {
+    variables = {
+      "LOG_LEVEL"  = var.lambda_log_level
+      "FROM_EMAIL" = var.from_email
+      "TO_EMAIL"   = var.to_email
+    }
+  }
 
   layers = [
     aws_lambda_layer_version.layer.arn
   ]
-  source_code_hash = filebase64sha256(local.lambda_package_path)
+  source_code_hash = filebase64sha256(aws_s3_object.lambda.source)
 
   depends_on = [aws_iam_role_policy_attachment.lambda_role_attachment]
 }
@@ -22,7 +30,7 @@ resource "aws_lambda_function_url" "test_latest" {
 resource "aws_lambda_layer_version" "layer" {
   layer_name          = "${local.lambda_name}-layer"
   s3_bucket           = aws_s3_bucket.lambda_bucket.id
-  s3_key              = local.lambda_layer_package
-  source_code_hash    = filebase64sha256(local.lambda_layer_path)
+  s3_key              = aws_s3_object.layers.key
   compatible_runtimes = ["python3.9"]
+  source_code_hash    = filebase64sha256(aws_s3_object.layers.source)
 }

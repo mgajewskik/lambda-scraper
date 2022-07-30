@@ -1,13 +1,17 @@
 # lambda-scraper
 
-TODO:
-- create a cloudwatch event to invoke lambda automatically
-- write scraper that scrapes the movies
-- create github actions pipeline that automatially deploys the code with each push to master
-- create backend of S3 for terraform state, or maybe terraform online?
-- create s3 buckets to store state files there
-- pass email as an environment variable to lambda function
-- how to pass github secrets to terraform variables?
+Create `requirements.txt` from `pyproject.toml`, skip everything after `;`
 
-# Considerations
+```bash
+poetry export -f requirements.txt --without-hashes | sed -e 's/;.*//' > requirements.txt
+```
+
+TODO:
+
+- create a cloudwatch event to invoke lambda automatically
+- create github actions pipeline that automatially deploys the code with each push to master
+- remove src directory from code, refactor tf files
+
+## Considerations
+
 - to send emails to other people move out of [AWS SES Sandbox](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html?icmpid=docs_ses_console)

@@ -1,7 +1,8 @@
+import os
+
 import boto3
 
-EMAIL = "mgajewskik+SES@gmail.com"
-
+CHARSET = "UTF-8"
 HTML_EMAIL_CONTENT = """
     <html>
         <head></head>
@@ -14,12 +15,11 @@ HTML_EMAIL_CONTENT = """
 
 def send_plain_email():
     ses_client = boto3.client("ses", region_name="us-east-1")
-    CHARSET = "UTF-8"
 
     response = ses_client.send_email(
         Destination={
             "ToAddresses": [
-                EMAIL,
+                os.environ["FROM_EMAIL"],
             ],
         },
         Message={
@@ -34,7 +34,7 @@ def send_plain_email():
                 "Data": "Test Email",
             },
         },
-        Source=EMAIL,
+        Source=os.environ["FROM_EMAIL"],
     )
     return response
 
