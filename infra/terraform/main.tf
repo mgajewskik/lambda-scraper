@@ -40,7 +40,6 @@ locals {
 
 resource "aws_s3_bucket" "lambda_bucket" {
   bucket = "${local.lambda_name}-${random_uuid.bucket.id}"
-  acl    = "private"
 }
 
 resource "aws_s3_bucket_public_access_block" "example" {
