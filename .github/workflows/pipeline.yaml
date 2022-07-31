@@ -14,12 +14,14 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
+
       - name: Setup Poetry
         uses: abatilo/actions-poetry@v2.0.0
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
       - name: Generate requirements
         run: poetry export -f requirements.txt --without-hashes | sed -e 's/;.*//' > requirements.txt
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
       - name: Terraform Format
         run: terraform fmt -check -recursive -diff
 
@@ -35,21 +37,25 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: "3.10"
+
       - name: Setup Poetry
         uses: abatilo/actions-poetry@v2.0.0
       - name: Generate requirements
         run: poetry export -f requirements.txt --without-hashes | sed -e 's/;.*//' > requirements.txt
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
       - name: Terraform Init
+        working-directory: ./infra/terraform
         run: terraform init
-        working-directory: ./infra/terraform
+
       - name: Terraform Apply
-        run: terraform apply
         working-directory: ./infra/terraform
+        run: terraform apply -auto-approve
