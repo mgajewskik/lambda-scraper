@@ -1,10 +1,12 @@
 terraform {
   required_version = "~>1.2"
-  backend "s3" {
-    bucket         = "terraform-state-files-z408xc9brfmno7u3"
-    key            = "lambda-scraper/terraform.tfstate"
-    dynamodb_table = "terraform-state-lock-z408xc9brfmno7u3"
-    region         = "us-east-1"
+
+  backend "remote" {
+    hostname     = "app.terraform.io"
+    organization = "mgajewskik"
+    workspaces {
+      name = "lambda-scraper"
+    }
   }
 
   required_providers {
